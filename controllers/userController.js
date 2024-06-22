@@ -23,7 +23,7 @@ class UserController {
     }
 
     const hashPasswoord = await bcrypt.hash(password, 5);
-    const user = await User.create({ email, role, password: hashPasswoord });
+    const user = await User.create({ email, password: hashPasswoord, role });
     const token = generateJwt(user.id, user.email, user.role);
     return res.json({ token });
   }
@@ -48,6 +48,7 @@ class UserController {
   //Проверяем юзера (фейсконтроль)
   async check(req, res, next) {
     const token = generateJwt(req.user.id, req.user.email, req.user.role);
+    if(token == null) token='null';
     return res.json({token});
   }
 }

@@ -6,6 +6,9 @@ module.exports = function (req, res, next) {
     }
     try {
         const token = req.headers.authorization.split(' ')[1];
+        if(token == null){
+            token = 'null';
+        }
         if (!token) {
             return res.status(401).json({ message: "no auth" });
         }
@@ -13,6 +16,6 @@ module.exports = function (req, res, next) {
         req.user = decoded;
         next();
     } catch (e) {
-        res.status(401).json({ message: "no auth" });
+        res.status(200).json({ message: "no auth" });
     }
 }

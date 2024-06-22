@@ -8,7 +8,7 @@ const User = sequelize.define('user', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     email: { type: DataTypes.STRING, unique: true },
     password: { type: DataTypes.STRING },
-    role: { type: DataTypes.STRING, defaultValue: "USER" },
+    role: { type: DataTypes.STRING, defaultValue: "SPEC" },
 });
 
 const Booking = sequelize.define('booking', {
@@ -19,6 +19,14 @@ const Booking = sequelize.define('booking', {
     // booking_id: {type: DataTypes.STRING, defaultValue: "ItemInBooking"},
     // auto_id: {type: DataTypes.STRING, defaultValue: "ItemInBooking"},
     // user_id: {type: DataTypes.STRING, defaultValue: "ItemInBooking"},
+});
+
+const AutoBooking = sequelize.define('auto_order', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    name: { type: DataTypes.STRING, allowNull: false },
+    email: { type: DataTypes.STRING, allowNull: false},
+    date: {type: DataTypes.DATEONLY, allowNull: false},
+    time: {type: DataTypes.TIME, allowNull: false}
 });
 
 const Auto = sequelize.define('auto', {
@@ -125,6 +133,12 @@ Auto.belongsTo(Body);
 Gearbox.hasMany(Auto);
 Auto.belongsTo(Gearbox);
 
+Auto.hasMany(AutoBooking, {as: "auto"});
+AutoBooking.belongsTo(Auto);
+
+Color.hasMany(AutoBooking, {as: "color"});
+AutoBooking.belongsTo(Color);
+
 module.exports = {
     User,
     Booking,
@@ -134,5 +148,6 @@ module.exports = {
     Body,
     Color,
     Gearbox,
-    Image
+    Image,
+    AutoBooking
 }
